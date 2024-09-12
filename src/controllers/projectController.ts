@@ -5,10 +5,16 @@ import * as ProjectService from "../services/projectService";
 export class ProjectController {
     public async getProjects(req: Request, res: Response): Promise<void> {
         try {
-            const tasks: Array<Project> = await ProjectService.getProjects();
-            res.status(200).json(tasks);
+            const projects = await ProjectService.getProjects();
+
+            if (!projects) {
+                res.status(404).json('No projects found');
+                return;
+            }
+
+            res.status(200).json(projects);
         } catch (error) {
-            res.status(500).json({ error: "Failed to fetch tasks" });
+            res.status(500).json({ error: "Failed to fetch projects" });
         }
     }
 
@@ -18,14 +24,14 @@ export class ProjectController {
             const project = await ProjectService.getProject(projectId);
 
             if (!project) {
-                res.status(404).json('No project found');
+                res.status(404).json('Project not found');
                 return;
             }
 
             project.tasks = await ProjectService.getTasks(projectId);
             res.status(200).json(project);
         } catch (error) {
-            res.status(500).json({ error: "Failed to fetch tasks" });
+            res.status(500).json({ error: "Failed to fetch project" });
         }
     }
 }

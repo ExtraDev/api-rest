@@ -2,14 +2,15 @@ import { pool } from '../app';
 import { Project } from '../models/project';
 import { Task } from '../models/task';
 
-export async function getProjects(): Promise<Array<Project>> {
-    try {
-        const [rows] = await pool.query("SELECT * FROM projects");
-        return rows as Array<Project>;
-    } catch (e) {
-        console.log(e);
-        return new Array<Project>();
+export async function getProjects(): Promise<Array<Project> | undefined> {
+    const [rows] = await pool.query("SELECT * FROM projects");
+    const projects = rows as Array<Project>;
+
+    if (projects.length === 0) {
+        return undefined;
     }
+
+    return projects;
 }
 
 export async function getProject(id: number): Promise<Project | undefined> {
