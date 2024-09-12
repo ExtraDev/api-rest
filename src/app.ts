@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import taskRoutes from "./routes/taskRoutes";
+import projectRoutes from "./routes/projectRoutes";
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 
@@ -19,5 +20,6 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api", taskRoutes);
+app.use("/api", projectRoutes);
 
 export default app;
