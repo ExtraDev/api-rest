@@ -1,9 +1,8 @@
-import express from "express";
 import bodyParser from "body-parser";
-import taskRoutes from "./routes/taskRoutes";
-import projectRoutes from "./routes/projectRoutes";
-import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import express from "express";
+import mysql from 'mysql2/promise';
+import routes from './routes';
 
 dotenv.config();
 
@@ -18,8 +17,6 @@ export const pool = mysql.createPool({
 const app = express();
 
 app.use(bodyParser.json());
-
-app.use("/api", taskRoutes);
-app.use("/api", projectRoutes);
+app.use("/api", routes());
 
 export default app;

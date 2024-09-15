@@ -34,4 +34,26 @@ export class ProjectController {
             res.status(500).json({ error: "Failed to fetch project" });
         }
     }
+
+    public async createProject(req: Request, res: Response): Promise<void> {
+        try {
+            const newProject = {
+                name: req.body.name,
+                description: req.body.description
+            } as Project;
+
+            console.log(newProject);
+
+            const project = await ProjectService.createProjet(newProject);
+
+            if (!project) {
+                res.status(500).json('Failed to create project');
+                return;
+            }
+
+            res.status(200).json(project);
+        } catch (error) {
+            res.status(400).json({ error });
+        }
+    }
 }
