@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Project } from "../models/project";
-import * as ProjectService from "../services/projectService";
+import { Project } from "./project.model";
+import * as ProjectService from "./projects.service";
 
 export class ProjectController {
     public async getProjects(req: Request, res: Response): Promise<void> {

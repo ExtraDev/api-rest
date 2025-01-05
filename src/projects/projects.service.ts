@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
-import { Project } from '../models/project';
-import { Task } from '../models/task';
+import { Task } from '../tasks/tasks.model';
+import { Project } from './project.model';
 
 export async function getProjects(): Promise<Array<Project> | undefined> {
     const [rows] = await pool.query("SELECT * FROM projects");

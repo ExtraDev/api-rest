@@ -1,5 +1,5 @@
-import { Task } from '../models/task';
 import { pool } from '../app';
+import { Task } from './tasks.model';
 
 
 export async function getTasks(): Promise<Array<Task>> {

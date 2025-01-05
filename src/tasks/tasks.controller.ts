@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Task } from "../models/task";
-import * as TaskService from "../services/taskService";
+import { Task } from "./tasks.model";
+import * as TaskService from "./tasks.service";
 
 export class TaskController {
     public async getTasks(req: Request, res: Response): Promise<void> {
