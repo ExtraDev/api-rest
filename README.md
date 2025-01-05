@@ -1,4 +1,5 @@
 # Basic API REST project
+This REST API lets you manage projects and tasks.
 
 ## Technos
 - Nodejs
@@ -30,3 +31,16 @@ Access to phpMyAdmin by: http://localhost:8080
 - password: admin
 
 Use postman and import collection "API-REST.postman_collection.json" to test you API.
+
+## Stop the project
+To stop the database base by docker use:
+```
+docker-compose down
+```
+
+To stop the application, simply ctrl + c in the terminal
+
+To reset the database, remove the volume by:
+```
+docker volume rm api-rest_mysql_data
+```
