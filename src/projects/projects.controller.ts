@@ -38,8 +38,8 @@ export class ProjectController {
     public async createProject(req: Request, res: Response): Promise<void> {
         try {
             const newProject = {
-                name: req.body.name,
-                description: req.body.description
+                name: req.body.name || undefined,
+                description: req.body.description || undefined
             } as Project;
 
             console.log(newProject);
@@ -48,6 +48,33 @@ export class ProjectController {
 
             if (!project) {
                 res.status(500).json('Failed to create project');
+                return;
+            }
+
+            res.status(200).json(project);
+        } catch (error) {
+            res.status(400).json({ error });
+        }
+    }
+
+    public async updateProject(req: Request, res: Response): Promise<void> {
+        try {
+            const projectId = parseInt(req.params.id);
+
+            if (!projectId) {
+                res.status(400).json('Miss project id!');
+                return;
+            }
+
+            const newProject = {
+                name: req.body.name || undefined,
+                description: req.body.description || undefined
+            } as Project;
+
+            const project = await ProjectService.updateProject(newProject, projectId);
+
+            if (!project) {
+                res.status(500).json('Failed to update project');
                 return;
             }
 

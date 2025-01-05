@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 const router = Router();
 tasksRoutes(router);
 projectsRoutes(router);
+app.use("/", router);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {

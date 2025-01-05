@@ -22,9 +22,8 @@ export async function createProjet(project: Project): Promise<Project | undefine
     `, [name, description]);
 
     const insertResult = result as mysql.ResultSetHeader;
-    const projectId = insertResult.insertId;
 
-    const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [projectId]);
+    const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [insertResult.insertId]);
     const projects = rows as Array<Project>;
 
     if (projects.length === 0) {
@@ -54,4 +53,22 @@ export async function getTasks(id: number): Promise<Array<Task> | undefined> {
     }
 
     return tasks;
+};
+
+export async function updateProject(project: Project, id: number): Promise<Project | undefined> {
+    try {
+        const [result] = await pool.query("UPDATE projects SET name = ?, description = ? WHERE id = ?",
+            [project.name, project.description, id]);
+
+        const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [id]);
+        const projects = rows as Array<Project>;
+
+        if (projects.length === 0) {
+            return undefined;
+        }
+
+        return projects[0];
+    } catch (error) {
+        console.log(error);
+    }
 };

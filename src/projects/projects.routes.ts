@@ -8,4 +8,6 @@ export default (router: Router) => {
     router.get("/projects/:id", projectController.getProject);
 
     router.post("/projects/", projectController.createProject);
+
+    router.put("/projects/:id", projectController.updateProject);
 }
