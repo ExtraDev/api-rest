@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
 import { wrapQueryResult, wrapQueryResults } from '../helpers/query.helper';
-import { Task } from '../tasks/tasks.model';
+import { Task } from '../tasks/task.model';
 import { Project } from './project.model';
 
 export async function getProjects(): Promise<Array<Project> | undefined> {

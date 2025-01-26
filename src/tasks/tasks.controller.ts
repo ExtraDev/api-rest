@@ -1,10 +1,29 @@
 import { Request, Response } from "express";
+import { checkTaskMandatoryFields, extractTaskFromBody } from "./tasks.helper";
 import * as TaskService from "./tasks.service";
 
 export class TaskController {
     public async getTasks(req: Request, res: Response): Promise<void> {
         try {
             res.status(200).json(await TaskService.getTasks());
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'An error occurred' });
+        }
+    }
+
+    public async createTask(req: Request, res: Response): Promise<void> {
+        try {
+            const newTask = extractTaskFromBody(req);
+            checkTaskMandatoryFields(newTask);
+
+            const task = await TaskService.createTask(newTask);
+
+            if (!task) {
+                res.status(500).json('Failed to create task');
+                return;
+            }
+
+            res.status(200).json(task);
         } catch (error: any) {
             res.status(500).json({ message: error.message || 'An error occurred' });
         }
