@@ -1,26 +1,25 @@
 import { Request, Response } from "express";
-import { Project } from "./project.model";
+import { checkProjectMandatoryFields, extractProjectFromBody } from "./projects.helper";
 import * as ProjectService from "./projects.service";
 
 export class ProjectController {
     public async getProjects(req: Request, res: Response): Promise<void> {
         try {
-            const projects = await ProjectService.getProjects();
-
-            if (!projects) {
-                res.status(404).json('No projects found');
-                return;
-            }
-
-            res.status(200).json(projects);
-        } catch (error) {
-            res.status(500).json({ error: "Failed to fetch projects" });
+            res.status(200).json(await ProjectService.getProjects());
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'An error occurred' });
         }
     }
 
     public async getProject(req: Request, res: Response): Promise<void> {
         try {
             const projectId = parseInt(req.params.id);
+
+            if (!projectId) {
+                res.status(400).json('Miss project id!');
+                return;
+            }
+
             const project = await ProjectService.getProject(projectId);
 
             if (!project) {
@@ -30,19 +29,15 @@ export class ProjectController {
 
             project.tasks = await ProjectService.getTasks(projectId);
             res.status(200).json(project);
-        } catch (error) {
-            res.status(500).json({ error: "Failed to fetch project" });
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'An error occurred' });
         }
     }
 
     public async createProject(req: Request, res: Response): Promise<void> {
         try {
-            const newProject = {
-                name: req.body.name || undefined,
-                description: req.body.description || undefined
-            } as Project;
-
-            console.log(newProject);
+            const newProject = extractProjectFromBody(req);
+            checkProjectMandatoryFields(newProject);
 
             const project = await ProjectService.createProjet(newProject);
 
@@ -52,8 +47,8 @@ export class ProjectController {
             }
 
             res.status(200).json(project);
-        } catch (error) {
-            res.status(400).json({ error });
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'An error occurred' });
         }
     }
 
@@ -66,12 +61,10 @@ export class ProjectController {
                 return;
             }
 
-            const newProject = {
-                name: req.body.name || undefined,
-                description: req.body.description || undefined
-            } as Project;
+            const projectToUpdated = extractProjectFromBody(req);
+            checkProjectMandatoryFields(projectToUpdated);
 
-            const project = await ProjectService.updateProject(newProject, projectId);
+            const project = await ProjectService.updateProject(projectToUpdated, projectId);
 
             if (!project) {
                 res.status(500).json('Failed to update project');
@@ -79,8 +72,8 @@ export class ProjectController {
             }
 
             res.status(200).json(project);
-        } catch (error) {
-            res.status(400).json({ error });
+        } catch (error: any) {
+            res.status(500).json({ message: error.message || 'An error occurred' });
         }
     }
 }

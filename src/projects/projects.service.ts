@@ -1,74 +1,56 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
+import { wrapQueryResult, wrapQueryResults } from '../helpers/query.helper';
 import { Task } from '../tasks/tasks.model';
 import { Project } from './project.model';
 
 export async function getProjects(): Promise<Array<Project> | undefined> {
-    const [rows] = await pool.query("SELECT * FROM projects");
-    const projects = rows as Array<Project>;
-
-    if (projects.length === 0) {
-        return undefined;
-    }
-
-    return projects;
+    return wrapQueryResults<Project>(await pool.query("SELECT * FROM projects"));
 }
 
 export async function createProjet(project: Project): Promise<Project | undefined> {
     const { name, description } = project;
+
     const [result] = await pool.execute(`
         INSERT INTO projects (name, description)
         VALUES (?, ?)
     `, [name, description]);
 
-    const insertResult = result as mysql.ResultSetHeader;
+    // Retrieve the inserted id of object created
+    const projectId = (result as mysql.ResultSetHeader).insertId;
 
-    const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [insertResult.insertId]);
-    const projects = rows as Array<Project>;
-
-    if (projects.length === 0) {
-        return undefined;
-    }
-
-    return projects[0];
+    return getProject(projectId);
 }
 
 export async function getProject(id: number): Promise<Project | undefined> {
-    const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [id]);
-    const projects = rows as Array<Project>;
-
-    if (projects.length === 0) {
-        return undefined;
-    }
-
-    return projects[0];
+    return wrapQueryResult<Project>(
+        await pool.query(`
+            SELECT * 
+            FROM projects WHERE id = ?`,
+            [id]
+        )
+    );
 };
 
-export async function getTasks(id: number): Promise<Array<Task> | undefined> {
-    const [rows] = await pool.query("SELECT * FROM tasks WHERE idProject = ?", [id]);
-    const tasks = rows as Array<Task>;
+export async function updateProject(project: Project, projectId: number): Promise<Project | undefined> {
+    const { name, description } = project;
 
-    if (tasks.length === 0) {
-        return undefined;
-    }
+    await pool.query(`
+        UPDATE projects 
+        SET name = ?, description = ? 
+        WHERE id = ?`,
+        [name, description, projectId]
+    );
 
-    return tasks;
+    return getProject(projectId);
 };
 
-export async function updateProject(project: Project, id: number): Promise<Project | undefined> {
-    try {
-        const [result] = await pool.query("UPDATE projects SET name = ?, description = ? WHERE id = ?",
-            [project.name, project.description, id]);
-
-        const [rows] = await pool.query("SELECT * FROM projects WHERE id = ?", [id]);
-        const projects = rows as Array<Project>;
-
-        if (projects.length === 0) {
-            return undefined;
-        }
-
-        return projects[0];
-    } catch (error) {
-        console.log(error);
-    }
+export async function getTasks(projectId: number): Promise<Array<Task> | undefined> {
+    return wrapQueryResults(
+        await pool.query(`
+            SELECT * FROM tasks 
+            WHERE idProject = ?`,
+            [projectId]
+        )
+    );
 };

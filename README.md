@@ -11,7 +11,7 @@ This REST API lets you manage projects and tasks.
     - phpMyAdmin
 
 ## Run the project
-First, rename the file ".env.example" to ".env"
+First, rename the file ".env.example" to ".env" in the "src" folder.
 
 Run the database and phpMyAdmin with docker by using this command :
 ```
@@ -43,4 +43,14 @@ To stop the application, simply ctrl + c in the terminal
 To reset the database, remove the volume by:
 ```
 docker volume rm api-rest_mysql_data
+```
+
+# Deploy
+## Build container
+```
+docker build -t api_container . 
+```
+## Run container
+```
+docker run -p 3000:3000 api_container
 ```
