@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { checkProjectMandatoryFields, extractProjectFromBody } from "./projects.helper";
+import { extractProjectFromBody } from "./projects.helper";
 import * as ProjectService from "./projects.service";
 
 export class ProjectController {
@@ -16,14 +16,14 @@ export class ProjectController {
             const projectId = parseInt(req.params.id);
 
             if (!projectId) {
-                res.status(400).json('Miss project id!');
+                res.status(400).json({ message: 'Miss project id!' });
                 return;
             }
 
             const project = await ProjectService.getProject(projectId);
 
             if (!project) {
-                res.status(404).json('Project not found');
+                res.status(404).json({ message: 'Project not found' });
                 return;
             }
 
@@ -37,12 +37,11 @@ export class ProjectController {
     public async createProject(req: Request, res: Response): Promise<void> {
         try {
             const newProject = extractProjectFromBody(req);
-            checkProjectMandatoryFields(newProject);
 
             const project = await ProjectService.createProjet(newProject);
 
             if (!project) {
-                res.status(500).json('Failed to create project');
+                res.status(500).json({ message: 'Failed to create project' });
                 return;
             }
 
@@ -57,17 +56,16 @@ export class ProjectController {
             const projectId = parseInt(req.params.id);
 
             if (!projectId) {
-                res.status(400).json('Miss project id!');
+                res.status(400).json({ message: 'Miss project id!' });
                 return;
             }
 
             const projectToUpdated = extractProjectFromBody(req);
-            checkProjectMandatoryFields(projectToUpdated);
 
             const project = await ProjectService.updateProject(projectToUpdated, projectId);
 
             if (!project) {
-                res.status(500).json('Failed to update project');
+                res.status(500).json({ message: 'Failed to update project' });
                 return;
             }
 

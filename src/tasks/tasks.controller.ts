@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { checkTaskMandatoryFields, extractTaskFromBody } from "./tasks.helper";
+import { extractTaskFromBody } from "./tasks.helper";
 import * as TaskService from "./tasks.service";
 
 export class TaskController {
@@ -14,12 +14,11 @@ export class TaskController {
     public async createTask(req: Request, res: Response): Promise<void> {
         try {
             const newTask = extractTaskFromBody(req);
-            checkTaskMandatoryFields(newTask);
 
             const task = await TaskService.createTask(newTask);
 
             if (!task) {
-                res.status(500).json('Failed to create task');
+                res.status(500).json({ message: 'Failed to create task' });
                 return;
             }
 

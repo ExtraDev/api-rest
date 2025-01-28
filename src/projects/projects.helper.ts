@@ -2,24 +2,18 @@ import { Request } from "express";
 import { Project } from "./project.model";
 
 export function extractProjectFromBody(req: Request): Project {
-    if (!req.body || Object.keys(req.body).length === 0) {
-        throw new Error('Empty body');
-    }
+    const { name, description } = req.body as Project;
 
-    return {
-        name: req.body.name || null,
-        description: req.body.description || null
-    } as Project;
-}
-
-export function checkProjectMandatoryFields(project: Project) {
-    const { name, description } = project;
-
-    if (name === null) {
+    if (!name) {
         throw new Error('Project name cannot be empty');
     }
 
-    if (description === null) {
+    if (!description) {
         throw new Error('Project description cannot be empty');
     }
+
+    return {
+        name: name,
+        description: description
+    } as Project;
 }
