@@ -16,8 +16,16 @@ export const isParamsSetted = async (req: Request, res: Response, next: NextFunc
     return next();
 }
 
+export const validateJsonFormat = (err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof SyntaxError && 'body' in err) {
+        res.status(400).json({ error: 'Invalid JSON format' });
+    } else {
+        next(err);
+    }
+}
+
 export const logAction = async (req: Request, res: Response, next: NextFunction) => {
     // Push in DB
-    console.log(req.body, req.params, req.route.path, req.route.methods);
+    console.log(req.body, req.params, req.route?.path, req.route?.methods);
     return next();
 }

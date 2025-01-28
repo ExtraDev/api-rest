@@ -6,6 +6,7 @@ import { createServer } from "http";
 import mysql from 'mysql2/promise';
 import { Server } from "socket.io";
 
+import { validateJsonFormat } from "./common/middlewares/query.middleware";
 import projectsRoutes from "./projects/projects.routes";
 import tasksRoutes from "./tasks/tasks.routes";
 
@@ -33,7 +34,8 @@ app.use(bodyParser.json());
 const router = Router();
 tasksRoutes(router);
 projectsRoutes(router);
-app.use("/", router);
+
+app.use("/", validateJsonFormat, router);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
