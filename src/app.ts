@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import { validateJsonFormat } from "./common/middlewares/query.middleware";
 import projectsRoutes from "./projects/projects.routes";
 import tasksRoutes from "./tasks/tasks.routes";
+import usersRoutes from "./users/users.routes";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 const router = Router();
 tasksRoutes(router);
 projectsRoutes(router);
+usersRoutes(router);
 
 app.use("/", validateJsonFormat, router);
 

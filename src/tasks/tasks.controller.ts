@@ -7,7 +7,7 @@ export class TaskController {
         try {
             res.status(200).json(await TaskService.getTasks());
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -18,13 +18,13 @@ export class TaskController {
             const task = await TaskService.createTask(newTask);
 
             if (!task) {
-                res.status(500).json({ message: 'Failed to create task' });
+                res.status(500).json({ error: 'Failed to create task' });
                 return;
             }
 
             res.status(200).json(task);
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 }

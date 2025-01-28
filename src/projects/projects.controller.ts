@@ -7,7 +7,7 @@ export class ProjectController {
         try {
             res.status(200).json(await ProjectService.getProjects());
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -30,7 +30,7 @@ export class ProjectController {
             project.tasks = await ProjectService.getTasks(projectId);
             res.status(200).json(project);
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -47,7 +47,7 @@ export class ProjectController {
 
             res.status(200).json(project);
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -65,13 +65,13 @@ export class ProjectController {
             const project = await ProjectService.updateProject(projectToUpdated, projectId);
 
             if (!project) {
-                res.status(500).json({ message: 'Failed to update project' });
+                res.status(500).json({ error: 'Failed to update project' });
                 return;
             }
 
             res.status(200).json(project);
         } catch (error: any) {
-            res.status(500).json({ message: error.message || 'An error occurred' });
+            res.status(500).json({ error: error.message || 'An error occurred' });
         }
     }
 }
