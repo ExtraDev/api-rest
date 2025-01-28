@@ -15,3 +15,9 @@ export const isParamsSetted = async (req: Request, res: Response, next: NextFunc
 
     return next();
 }
+
+export const logAction = async (req: Request, res: Response, next: NextFunction) => {
+    // Push in DB
+    console.log(req.body, req.params, req.route.path, req.route.methods);
+    return next();
+}
