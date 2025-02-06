@@ -8,3 +8,8 @@ export interface User {
     address?: string;
     password?: string;
 }
+
+export interface UserAuth {
+    login?: string;
+    password: string;
+}

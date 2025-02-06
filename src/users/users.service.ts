@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
 import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helper';
-import { User } from './user.model';
+import { User, UserAuth } from './user.model';
 
 export async function getUsers(): Promise<Array<User>> {
     return wrapQueryResults<User>(await pool.query(`
@@ -31,4 +31,17 @@ export async function createUser(user: User): Promise<User | undefined> {
     const userId = (result as mysql.ResultSetHeader).insertId;
 
     return getUser(userId);
+}
+
+export async function login(user: UserAuth): Promise<User | undefined> {
+    const { login, password } = user;
+
+    console.log(login, password);
+
+    return wrapQueryResult<User>(await pool.query(`
+            SELECT * 
+            FROM users 
+            WHERE (email = ? OR username = ?) 
+        `, [login, login])
+    );
 }

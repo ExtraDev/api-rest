@@ -8,4 +8,5 @@ export default (router: Router) => {
     router.get("/users", logAction, userController.getUsers);
 
     router.post("/users", logAction, isBodySetted, userController.createUser);
+    router.post("/users/auth", logAction, isBodySetted, userController.authenticate);
 }
