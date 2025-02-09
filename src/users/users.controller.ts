@@ -45,6 +45,42 @@ export class UserController {
         }
     }
 
+    public async updateUser(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = req.params.id;
+
+            if (!userId) {
+                res.status(500).json({ error: 'Cannot update user' });
+                return;
+            }
+
+            const newUser = extractUserFromBody(req);
+
+            if (!newUser.password) {
+                res.status(500).json({ error: 'Password cannot be empty while creating user' });
+                return;
+            }
+
+            if (!process.env.BCRYPT_SALT_ROUND) {
+                res.status(500).json({ error: 'Server error' });
+                return;
+            }
+
+            newUser.password = await bcrypt.hash(newUser.password, parseInt(process.env.BCRYPT_SALT_ROUND));
+
+            const user = await UserService.createUser(newUser);
+
+            if (!user) {
+                res.status(500).json({ error: 'Failed to create user' });
+                return;
+            }
+
+            res.status(200).json(user);
+        } catch (error: any) {
+            res.status(500).json({ error: error.message || 'An error occurred' });
+        }
+    }
+
     public async authenticate(req: Request, res: Response): Promise<void> {
         try {
             const userAuth = extractUserAuthFromBody(req);

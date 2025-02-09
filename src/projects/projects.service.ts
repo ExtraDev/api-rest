@@ -16,7 +16,6 @@ export async function createProjet(project: Project): Promise<Project | undefine
         VALUES (?, ?)
     `, [name, description]);
 
-    // Retrieve the inserted id of object created
     const projectId = (result as mysql.ResultSetHeader).insertId;
 
     return getProject(projectId);

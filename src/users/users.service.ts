@@ -24,9 +24,9 @@ export async function createUser(user: User): Promise<User | undefined> {
     const { firsname, lastname, username, email, address, phone, password } = user;
 
     const [result] = await pool.query(`
-        INSERT INTO users(firsname, lastname, username, email, phone, address, password) 
-        VALUES (?,?,?,?,?,?,?)
-        `, [firsname, lastname, username, email, address, phone, password]);
+            INSERT INTO users(firsname, lastname, username, email, phone, address, password) 
+            VALUES (?,?,?,?,?,?,?)
+            `, [firsname, lastname, username, email, address, phone, password]);
 
     const userId = (result as mysql.ResultSetHeader).insertId;
 
@@ -35,8 +35,6 @@ export async function createUser(user: User): Promise<User | undefined> {
 
 export async function login(user: UserAuth): Promise<User | undefined> {
     const { login, password } = user;
-
-    console.log(login, password);
 
     return wrapQueryResult<User>(await pool.query(`
             SELECT * 
