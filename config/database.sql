@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mysql
--- Généré le : jeu. 12 sep. 2024 à 19:36
--- Version du serveur : 8.4.2
+-- Généré le : dim. 09 fév. 2025 à 09:52
+-- Version du serveur : 8.4.0
 -- Version de PHP : 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `mydb`
 --
-CREATE DATABASE IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `mydb`;
 
 -- --------------------------------------------------------
@@ -31,13 +31,9 @@ USE `mydb`;
 
 CREATE TABLE `projects` (
   `id` int NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Déchargement des données de la table `projects`
---
 
 INSERT INTO `projects` (`id`, `name`, `description`) VALUES
 (1, 'Premier projet', 'Ceci est le détail du premier projet');
@@ -50,20 +46,33 @@ INSERT INTO `projects` (`id`, `name`, `description`) VALUES
 
 CREATE TABLE `tasks` (
   `id` int NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('TODO','IN_PROGRESS','DONE') COLLATE utf8mb4_unicode_ci DEFAULT 'TODO',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` enum('TODO','IN_PROGRESS','DONE') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'TODO',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `idProject` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Déchargement des données de la table `tasks`
---
-
 INSERT INTO `tasks` (`id`, `title`, `description`, `status`, `created_at`, `idProject`) VALUES
 (1, 'Tâche 1', 'Description de la tâche 1', 'TODO', '2024-09-10 19:48:30', 1),
 (2, 'Tâche 2', 'Description de la tâche 2', 'IN_PROGRESS', '2024-09-10 19:48:30', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int NOT NULL,
+  `firsname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `lastname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `address` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `password` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Index pour les tables déchargées
@@ -83,6 +92,15 @@ ALTER TABLE `tasks`
   ADD KEY `taskToProject` (`idProject`);
 
 --
+-- Index pour la table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `phone` (`phone`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
@@ -90,13 +108,19 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT pour la table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
