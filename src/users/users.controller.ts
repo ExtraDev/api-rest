@@ -64,16 +64,10 @@ export class UserController {
 
     public async updateUser(req: Request, res: Response): Promise<void> {
         try {
-            const userId = req.params.id;
+            const userId = parseInt(req.params.id);
+            const userUpdate = extractUserFromBody(req);
 
-            if (!userId) {
-                res.status(500).json({ error: 'Cannot update user' });
-                return;
-            }
-
-            const newUser = extractUserFromBody(req);
-
-            if (!newUser.password) {
+            if (!userUpdate.password) {
                 res.status(500).json({ error: 'Password cannot be empty while creating user' });
                 return;
             }
@@ -83,16 +77,16 @@ export class UserController {
                 return;
             }
 
-            newUser.password = await bcrypt.hash(newUser.password, parseInt(process.env.BCRYPT_SALT_ROUND));
+            userUpdate.password = await bcrypt.hash(userUpdate.password, parseInt(process.env.BCRYPT_SALT_ROUND));
 
-            const user = await UserService.createUser(newUser);
+            const userUpdated = await UserService.updateUser(userUpdate, userId);
 
-            if (!user) {
-                res.status(500).json({ error: 'Failed to create user' });
+            if (!userUpdated) {
+                res.status(500).json({ error: 'Failed to update user' });
                 return;
             }
 
-            res.status(200).json(user);
+            res.status(200).json(userUpdated);
         } catch (error: any) {
             res.status(500).json({ error: error.message || 'An error occurred' });
         }

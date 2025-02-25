@@ -33,6 +33,17 @@ export async function createUser(user: UserRequest): Promise<UserReponse | undef
     return getUser(userId);
 }
 
+export async function updateUser(user: UserRequest, userId: number): Promise<UserReponse | undefined> {
+    await pool.query(`
+        UPDATE users 
+        SET firsname = ?, lastname = ?, username = ?, email = ?, phone = ?, address = ?, password = ?
+        WHERE id = ?`,
+        [user.firsname, user.lastname, user.username, user.email, user.phone, user.address, user.password, userId]
+    );
+
+    return getUser(userId);
+};
+
 export async function login(user: UserAuth): Promise<UserReponse | undefined> {
     const { login, password } = user;
 
