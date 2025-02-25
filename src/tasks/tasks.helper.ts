@@ -1,17 +1,12 @@
 import { Request } from "express";
-import { Task } from "./task.model";
+import { TaskRequest } from "./models/task.request.model";
 
-export function extractTaskFromBody(req: Request): Task {
-    const { title, description, status, created_at } = req.body as Task;
+export function extractTaskFromBody(req: Request): TaskRequest {
+    const { id, title, description, status, created_at } = req.body;
 
     if (!title) {
         throw new Error('Task title cannot be empty');
     }
 
-    return {
-        title: title,
-        description: description,
-        status: status,
-        created_at: created_at
-    } as Task;
+    return new TaskRequest(title, id, description, status, created_at);
 }

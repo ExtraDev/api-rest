@@ -11,11 +11,50 @@ export class TaskController {
         }
     }
 
+    public async getTask(req: Request, res: Response): Promise<void> {
+        try {
+            const taskId = parseInt(req.params.id);
+
+            if (!taskId) {
+                res.status(400).json({ message: 'Miss task id!' });
+                return;
+            }
+
+            res.status(200).json(await TaskService.getTask(taskId));
+        } catch (error: any) {
+            res.status(500).json({ error: error.message || 'An error occurred' });
+        }
+    }
+
     public async createTask(req: Request, res: Response): Promise<void> {
         try {
             const newTask = extractTaskFromBody(req);
 
             const task = await TaskService.createTask(newTask);
+
+            if (!task) {
+                res.status(500).json({ error: 'Failed to create task' });
+                return;
+            }
+
+            res.status(200).json(task);
+        } catch (error: any) {
+            res.status(500).json({ error: error.message || 'An error occurred' });
+        }
+    }
+
+    public async updateTask(req: Request, res: Response): Promise<void> {
+        try {
+            const taskId = parseInt(req.params.id);
+
+            if (!taskId) {
+                res.status(400).json({ message: 'Miss task id!' });
+                return;
+            }
+
+            const newTask = extractTaskFromBody(req);
+
+            const task = await TaskService.updateTask(newTask, taskId);
 
             if (!task) {
                 res.status(500).json({ error: 'Failed to create task' });

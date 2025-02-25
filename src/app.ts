@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import express, { Router } from "express";
 import { createServer } from "http";
 import mysql from 'mysql2/promise';
-import { Server } from "socket.io";
 
 import { validateJsonFormat } from "./common/middlewares/query.middleware";
 import projectsRoutes from "./projects/projects.routes";
@@ -40,25 +39,6 @@ usersRoutes(router);
 app.use("/", validateJsonFormat, router);
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-    cors: {
-        origin: "http://localhost:4200",
-        methods: ["GET", "POST"],
-    }
-});
-
-io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    })
-
-    socket.on('message', (msg: string) => {
-        socket.emit('message', msg);
-        socket.broadcast.emit('message', msg);
-    })
-})
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
 import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helper';
-import { Task } from '../tasks/task.model';
+import { TaskResponse } from '../tasks/models/task.response.model';
 import { Project } from './project.model';
 
 export async function getProjects(): Promise<Array<Project> | undefined> {
@@ -44,7 +44,7 @@ export async function updateProject(project: Project, projectId: number): Promis
     return getProject(projectId);
 };
 
-export async function getTasks(projectId: number): Promise<Array<Task> | undefined> {
+export async function getTasks(projectId: number): Promise<Array<TaskResponse>> {
     return wrapQueryResults(
         await pool.query(`
             SELECT * FROM tasks 
