@@ -1,6 +1,6 @@
 import { Request } from "express";
+import { UserAuth } from "./models/user.auth.model";
 import { UserRequest } from "./models/user.request.model";
-import { UserAuth } from "./user.model";
 
 export function extractUserFromBody(req: Request): UserRequest {
     const { id, firsname, lastname, username, email, address, phone, password } = req.body;
