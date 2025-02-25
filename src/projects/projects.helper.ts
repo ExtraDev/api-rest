@@ -1,8 +1,8 @@
 import { Request } from "express";
-import { Project } from "./project.model";
+import { ProjectRequest } from "./models/project.request.model";
 
-export function extractProjectFromBody(req: Request): Project {
-    const { name, description } = req.body as Project;
+export function extractProjectFromBody(req: Request): ProjectRequest {
+    const { name, description } = req.body;
 
     if (!name) {
         throw new Error('Project name cannot be empty');
@@ -12,8 +12,5 @@ export function extractProjectFromBody(req: Request): Project {
         throw new Error('Project description cannot be empty');
     }
 
-    return {
-        name: name,
-        description: description
-    } as Project;
+    return new ProjectRequest(name, description);
 }

@@ -2,27 +2,26 @@ import mysql from 'mysql2/promise';
 import { pool } from '../app';
 import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helper';
 import { TaskResponse } from '../tasks/models/task.response.model';
-import { Project } from './project.model';
+import { ProjectRequest } from './models/project.request.model';
+import { ProjectResponse } from './models/project.response.model';
 
-export async function getProjects(): Promise<Array<Project> | undefined> {
-    return wrapQueryResults<Project>(await pool.query("SELECT * FROM projects"));
+export async function getProjects(): Promise<Array<ProjectResponse>> {
+    return wrapQueryResults<ProjectResponse>(await pool.query("SELECT * FROM projects"));
 }
 
-export async function createProjet(project: Project): Promise<Project | undefined> {
-    const { name, description } = project;
-
+export async function createProjet(project: ProjectRequest): Promise<ProjectResponse | undefined> {
     const [result] = await pool.execute(`
         INSERT INTO projects (name, description)
         VALUES (?, ?)
-    `, [name, description]);
+    `, [project.name, project.description]);
 
     const projectId = (result as mysql.ResultSetHeader).insertId;
 
     return getProject(projectId);
 }
 
-export async function getProject(id: number): Promise<Project | undefined> {
-    return wrapQueryResult<Project>(
+export async function getProject(id: number): Promise<ProjectResponse | undefined> {
+    return wrapQueryResult<ProjectResponse>(
         await pool.query(`
             SELECT * 
             FROM projects WHERE id = ?`,
@@ -31,14 +30,12 @@ export async function getProject(id: number): Promise<Project | undefined> {
     );
 };
 
-export async function updateProject(project: Project, projectId: number): Promise<Project | undefined> {
-    const { name, description } = project;
-
+export async function updateProject(project: ProjectRequest, projectId: number): Promise<ProjectResponse | undefined> {
     await pool.query(`
         UPDATE projects 
         SET name = ?, description = ? 
         WHERE id = ?`,
-        [name, description, projectId]
+        [project.name, project.description, projectId]
     );
 
     return getProject(projectId);

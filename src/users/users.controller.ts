@@ -16,6 +16,23 @@ export class UserController {
         }
     }
 
+    public async getUser(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = parseInt(req.params.id);
+
+            const user = await UserService.getUser(userId);
+
+            if (!user) {
+                res.status(404).json({ message: 'User not found' });
+                return;
+            }
+
+            res.status(200).json(user);
+        } catch (error: any) {
+            res.status(500).json({ error: error.message || 'An error occurred' });
+        }
+    }
+
     public async createUser(req: Request, res: Response): Promise<void> {
         try {
             const newUser = extractUserFromBody(req);

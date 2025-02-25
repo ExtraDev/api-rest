@@ -1,8 +1,9 @@
 import { Request } from "express";
-import { User, UserAuth } from "./user.model";
+import { UserRequest } from "./models/user.request.model";
+import { UserAuth } from "./user.model";
 
-export function extractUserFromBody(req: Request): User {
-    const { id, firsname, lastname, username, email, address, phone, password } = req.body as User;
+export function extractUserFromBody(req: Request): UserRequest {
+    const { id, firsname, lastname, username, email, address, phone, password } = req.body;
 
     if (!username) {
         throw new Error('Username cannot be empty');
@@ -12,16 +13,7 @@ export function extractUserFromBody(req: Request): User {
         throw new Error('Email cannot be empty');
     }
 
-    return {
-        id: id,
-        firsname: firsname,
-        lastname: lastname,
-        username: username,
-        email: email,
-        address: address,
-        phone: phone,
-        password: password
-    } as User;
+    return new UserRequest(username, email, id, firsname, lastname, phone, address, password);
 }
 
 export function extractUserAuthFromBody(req: Request): UserAuth {

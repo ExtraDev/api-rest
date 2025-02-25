@@ -1,12 +1,12 @@
 import { TaskStatus } from "./task.status.model";
 
 export class TaskResponse {
-    public id!: number;
-    public title!: string;
+    public id: number;
+    public title: string;
     public description?: string;
-    public status!: TaskStatus;
-    public created_at!: Date;
-    public idProject!: number;
+    public status: TaskStatus;
+    public created_at: Date;
+    public idProject: number;
 
     constructor(id: number, title: string, description: string, status: TaskStatus, created_at: Date, idProject: number) {
         this.id = id;

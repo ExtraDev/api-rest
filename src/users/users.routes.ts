@@ -7,6 +7,7 @@ const userController = new UserController();
 
 export default (router: Router) => {
     router.get("/users", logAction, isAuthenticated, userController.getUsers);
+    router.get("/users/:id", logAction, isParamsSetted, userController.getUser);
 
     router.post("/users", logAction, isBodySetted, userController.createUser);
     router.post("/users/auth", logAction, isBodySetted, userController.authenticate);
