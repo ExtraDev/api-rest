@@ -5,7 +5,8 @@ import express, { Router } from "express";
 import { createServer } from "http";
 import mysql from 'mysql2/promise';
 
-import { validateJsonFormat } from "./common/middlewares/query.middleware";
+import { isAuthenticated } from "./common/middlewares/jwt.middlewares";
+import { logAction, validateJsonFormat } from "./common/middlewares/query.middlewares";
 import projectsRoutes from "./projects/projects.routes";
 import tasksRoutes from "./tasks/tasks.routes";
 import usersRoutes from "./users/users.routes";
@@ -36,7 +37,7 @@ tasksRoutes(router);
 projectsRoutes(router);
 usersRoutes(router);
 
-app.use("/", validateJsonFormat, router);
+app.use("/", logAction, validateJsonFormat, isAuthenticated, router);
 
 const httpServer = createServer(app);
 

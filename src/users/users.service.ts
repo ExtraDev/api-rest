@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
-import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helper';
+import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helpers';
 import { UserAuth } from './models/user.auth.model';
 import { UserRequest } from './models/user.request.model';
 import { UserReponse } from './models/user.response.model';

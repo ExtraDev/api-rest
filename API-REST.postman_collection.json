@@ -12,6 +12,16 @@
 				{
 					"name": "projects",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -31,10 +41,20 @@
 				{
 					"name": "project",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/projects/3",
+							"raw": "http://localhost:3000/projects/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -42,7 +62,7 @@
 							"port": "3000",
 							"path": [
 								"projects",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -142,10 +162,20 @@
 				{
 					"name": "task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/tasks/2",
+							"raw": "http://localhost:3000/tasks/23",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -153,7 +183,7 @@
 							"port": "3000",
 							"path": [
 								"tasks",
-								"2"
+								"23"
 							]
 						}
 					},
@@ -162,11 +192,21 @@
 				{
 					"name": "task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Nouveau nom de projet\",\n    \"description\": \"Alo\"\n}",
+							"raw": "{\n    \"title\":\"Mise à jour de la tâche\",\n    \"description\": \"Aloa\",\n    \"status\": \"IN_PROGRESS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -191,11 +231,21 @@
 				{
 					"name": "task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Deuxième tâche depuis le code\"\n}",
+							"raw": "{\n    \"title\": \"Test\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -253,10 +303,20 @@
 				{
 					"name": "user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwidXNlcm5hbWUiOiJleHRyYWRldiIsImVtYWlsIjoic2NvdHQuYmlybmVyQGdtYWlsLmNvbSIsImlhdCI6MTc0MDIxNzE1M30.d_qujJFCUGDN99awhNwZaxTmfP5BhPHnRMhe5GDApvM",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/1",
+							"raw": "http://localhost:3000/users/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -264,7 +324,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"1"
+								"3"
 							]
 						}
 					},

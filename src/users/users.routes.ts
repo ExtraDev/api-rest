@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { isAuthenticated } from "../common/middlewares/jwt.middleware";
-import { isBodySetted, isParamsSetted, logAction } from "../common/middlewares/query.middleware";
+import { isBodySetted, isParamsSetted } from "../common/middlewares/query.middlewares";
 import { UserController } from "./users.controller";
+import { canUpdate } from "./users.middlewares";
 
 const userController = new UserController();
 
 export default (router: Router) => {
-    router.get("/users", logAction, isAuthenticated, userController.getUsers);
-    router.get("/users/:id", logAction, isParamsSetted, userController.getUser);
+    router.get("/users", userController.getUsers);
+    router.get("/users/:id", isParamsSetted, userController.getUser);
 
-    router.post("/users", logAction, isBodySetted, userController.createUser);
-    router.post("/users/auth", logAction, isBodySetted, userController.authenticate);
+    router.post("/users", isBodySetted, userController.createUser);
+    router.post("/users/auth", isBodySetted, userController.authenticate);
 
-    router.put("/users/:id", logAction, isParamsSetted, isBodySetted, userController.updateUser);
+    router.put("/users/:id", isParamsSetted, isBodySetted, canUpdate, userController.updateUser);
 }

@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
-import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helper';
+import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helpers';
 import { TaskResponse } from '../tasks/models/task.response.model';
 import { ProjectRequest } from './models/project.request.model';
 import { ProjectResponse } from './models/project.response.model';

@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
+import { CodeError } from "../common/errors/messages.errors";
 import { extractProjectFromBody } from "./projects.helper";
 import * as ProjectService from "./projects.service";
 
 export class ProjectController {
     public async getProjects(req: Request, res: Response): Promise<void> {
         try {
-            res.status(200).json(await ProjectService.getProjects());
+            res.status(CodeError.OK).json(await ProjectService.getProjects());
         } catch (error: any) {
-            res.status(500).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -16,7 +17,7 @@ export class ProjectController {
             const projectId = parseInt(req.params.id);
 
             if (!projectId) {
-                res.status(400).json({ message: 'Miss project id!' });
+                res.status(CodeError.BAD_REQUEST).json({ message: 'Miss project id!' });
                 return;
             }
 
@@ -28,9 +29,9 @@ export class ProjectController {
             }
 
             project.tasks = await ProjectService.getTasks(projectId);
-            res.status(200).json(project);
+            res.status(CodeError.OK).json(project);
         } catch (error: any) {
-            res.status(500).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -41,13 +42,13 @@ export class ProjectController {
             const project = await ProjectService.createProjet(newProject);
 
             if (!project) {
-                res.status(500).json({ message: 'Failed to create project' });
+                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ message: 'Failed to create project' });
                 return;
             }
 
-            res.status(200).json(project);
+            res.status(CodeError.CREATED).json(project);
         } catch (error: any) {
-            res.status(500).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -56,7 +57,7 @@ export class ProjectController {
             const projectId = parseInt(req.params.id);
 
             if (!projectId) {
-                res.status(400).json({ message: 'Miss project id!' });
+                res.status(CodeError.BAD_REQUEST).json({ message: 'Miss project id!' });
                 return;
             }
 
@@ -65,13 +66,13 @@ export class ProjectController {
             const project = await ProjectService.updateProject(projectToUpdated, projectId);
 
             if (!project) {
-                res.status(500).json({ error: 'Failed to update project' });
+                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update project' });
                 return;
             }
 
-            res.status(200).json(project);
+            res.status(CodeError.OK).json(project);
         } catch (error: any) {
-            res.status(500).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
         }
     }
 }

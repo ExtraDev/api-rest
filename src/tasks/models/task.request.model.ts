@@ -13,8 +13,8 @@ export class TaskRequest {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.status = !status ? TaskStatus.TODO : status;
-        this.created_at = !created_at ? new Date() : created_at;
+        this.status = status === undefined ? TaskStatus.TODO : status;
+        this.created_at = created_at === undefined ? new Date() : created_at;
         this.idProject = idProject;
     }
 
