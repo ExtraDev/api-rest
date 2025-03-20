@@ -9,12 +9,12 @@ export class TaskRequest {
     private created_at?: Date;
     public idProject?: number;
 
-    constructor(title: string, id?: number, description?: string, status?: TaskStatus, created_at?: Date, idProject?: number) {
+    constructor(title: string, id?: number, description?: string, status?: TaskStatus, idProject?: number) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status === undefined ? TaskStatus.TODO : status;
-        this.created_at = created_at === undefined ? new Date() : created_at;
+        this.created_at = new Date();
         this.idProject = idProject;
     }
 

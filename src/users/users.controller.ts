@@ -13,7 +13,7 @@ export class UserController {
         try {
             res.status(CodeError.OK).json(await UserService.getUsers());
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -30,7 +30,7 @@ export class UserController {
 
             res.status(CodeError.OK).json(user);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -59,16 +59,16 @@ export class UserController {
 
             res.status(CodeError.CREATED).json(user);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
     public async updateUser(req: Request, res: Response): Promise<void> {
         try {
             const userId = parseInt(req.params.id);
-            const userUpdate = extractUserFromBody(req);
+            const userRequest = extractUserFromBody(req);
 
-            if (!userUpdate.password) {
+            if (!userRequest.password) {
                 res.status(CodeError.BAD_REQUEST).json({ error: 'Password cannot be empty while creating user' });
                 return;
             }
@@ -78,9 +78,9 @@ export class UserController {
                 return;
             }
 
-            userUpdate.password = await bcrypt.hash(userUpdate.password, parseInt(process.env.BCRYPT_SALT_ROUND));
+            userRequest.password = await bcrypt.hash(userRequest.password, parseInt(process.env.BCRYPT_SALT_ROUND));
 
-            const userUpdated = await UserService.updateUser(userUpdate, userId);
+            const userUpdated = await UserService.updateUser(userRequest, userId);
 
             if (!userUpdated) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update user' });
@@ -89,7 +89,7 @@ export class UserController {
 
             res.status(CodeError.OK).json(userUpdated);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -122,7 +122,7 @@ export class UserController {
 
             res.status(CodeError.OK).json({ token: token_jwt });
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 }

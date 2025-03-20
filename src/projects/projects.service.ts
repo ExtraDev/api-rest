@@ -10,14 +10,42 @@ export async function getProjects(): Promise<Array<ProjectResponse>> {
 }
 
 export async function createProjet(project: ProjectRequest): Promise<ProjectResponse | undefined> {
-    const [result] = await pool.execute(`
-        INSERT INTO projects (name, description)
-        VALUES (?, ?)
-    `, [project.name, project.description]);
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
 
-    const projectId = (result as mysql.ResultSetHeader).insertId;
+    try {
+        const [result] = await connection.execute(
+            `INSERT INTO projects (name, description) VALUES (?, ?)`,
+            [project.name, project.description]
+        );
 
-    return getProject(projectId);
+        const projectId = (result as mysql.ResultSetHeader).insertId;
+
+        if (!projectId) {
+            throw new Error("Échec de la création du projet");
+        }
+
+        if (project.tasks && project.tasks.length > 0) {
+            for (const task of project.tasks) {
+                console.log(task.title, task.description, task.status, task.getCreatedAt(), projectId);
+                await connection.execute(
+                    `INSERT INTO tasks (title, description, status, created_at, idProject) 
+                     VALUES (?, ?, ?, ?, ?)`,
+                    [task.title, task.description ?? null, task.status, task.getCreatedAt(), projectId]
+                );
+            }
+        }
+
+        await connection.commit();
+
+        return getProject(projectId);
+    } catch (error) {
+        await connection.rollback();
+        console.log(error);
+        return undefined;
+    } finally {
+        connection.release();
+    }
 }
 
 export async function getProject(id: number): Promise<ProjectResponse | undefined> {

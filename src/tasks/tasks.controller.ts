@@ -8,7 +8,7 @@ export class TaskController {
         try {
             res.status(CodeError.OK).json(await TaskService.getTasks());
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -23,15 +23,15 @@ export class TaskController {
 
             res.status(CodeError.OK).json(await TaskService.getTask(taskId));
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
     public async createTask(req: Request, res: Response): Promise<void> {
         try {
-            const newTask = extractTaskFromBody(req);
+            const taskRequest = extractTaskFromBody(req);
 
-            const task = await TaskService.createTask(newTask);
+            const task = await TaskService.createTask(taskRequest);
 
             if (!task) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
@@ -40,7 +40,7 @@ export class TaskController {
 
             res.status(CodeError.CREATED).json(task);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -53,9 +53,9 @@ export class TaskController {
                 return;
             }
 
-            const newTask = extractTaskFromBody(req);
+            const taskRequest = extractTaskFromBody(req);
 
-            const task = await TaskService.updateTask(newTask, taskId);
+            const task = await TaskService.updateTask(taskRequest, taskId);
 
             if (!task) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
@@ -64,7 +64,7 @@ export class TaskController {
 
             res.status(CodeError.OK).json(task);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 }

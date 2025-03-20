@@ -3,7 +3,7 @@ import { CodeError } from "../common/errors/messages.errors";
 import { extractTokenJwt, extractTokenObject } from "../common/helpers/jwt.helpers";
 
 /**
- * Description: Check is the user can update the profile
+ * Description: Check is the user can update the ressource
  * @param req 
  * @param res 
  * @param next 

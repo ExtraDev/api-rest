@@ -8,7 +8,7 @@ export class ProjectController {
         try {
             res.status(CodeError.OK).json(await ProjectService.getProjects());
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -31,24 +31,26 @@ export class ProjectController {
             project.tasks = await ProjectService.getTasks(projectId);
             res.status(CodeError.OK).json(project);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
     public async createProject(req: Request, res: Response): Promise<void> {
         try {
-            const newProject = extractProjectFromBody(req);
+            const projectRequest = extractProjectFromBody(req);
 
-            const project = await ProjectService.createProjet(newProject);
+            const project = await ProjectService.createProjet(projectRequest);
 
             if (!project) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ message: 'Failed to create project' });
                 return;
             }
 
+            project.tasks = await ProjectService.getTasks(project.id);
+
             res.status(CodeError.CREATED).json(project);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 
@@ -61,9 +63,9 @@ export class ProjectController {
                 return;
             }
 
-            const projectToUpdated = extractProjectFromBody(req);
+            const projectRequest = extractProjectFromBody(req);
 
-            const project = await ProjectService.updateProject(projectToUpdated, projectId);
+            const project = await ProjectService.updateProject(projectRequest, projectId);
 
             if (!project) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update project' });
@@ -72,7 +74,7 @@ export class ProjectController {
 
             res.status(CodeError.OK).json(project);
         } catch (error: any) {
-            res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: error.message || 'An error occurred' });
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
 }
