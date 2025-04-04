@@ -12,4 +12,6 @@ export default (router: Router) => {
     router.post("/projects/", isAuthenticated, isBodySetted, projectController.createProject);
 
     router.put("/projects/:id", isAuthenticated, isBodySetted, isParamsSetted, projectController.updateProject);
+
+    router.delete("/projects/:id", isAuthenticated, isParamsSetted, projectController.deleteProject);
 }

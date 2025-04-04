@@ -78,3 +78,10 @@ export async function getTasks(projectId: number): Promise<Array<TaskResponse>> 
         )
     );
 };
+
+export async function deleteProject(projectId: number): Promise<boolean> {
+    const [result] = await pool.query(`DELETE FROM projects WHERE id = ?`, [projectId]);
+    const { affectedRows } = result as mysql.ResultSetHeader;
+
+    return affectedRows > 0;
+}

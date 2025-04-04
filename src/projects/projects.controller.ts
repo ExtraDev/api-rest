@@ -77,4 +77,26 @@ export class ProjectController {
             res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
         }
     }
+
+    public async deleteProject(req: Request, res: Response): Promise<void> {
+        try {
+            const projectId = parseInt(req.params.id);
+
+            if (!projectId) {
+                res.status(CodeError.BAD_REQUEST).json({ message: 'Miss project id!' });
+                return;
+            }
+
+            const project = await ProjectService.deleteProject(projectId);
+
+            if (!project) {
+                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete project' });
+                return;
+            }
+
+            res.status(CodeError.OK).json(project);
+        } catch (error: any) {
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
+        }
+    }
 }
