@@ -1,4 +1,3 @@
-import { formatInTimeZone } from "date-fns-tz";
 import { TaskStatus } from "./task.status.model";
 
 export class TaskRequest {
@@ -6,7 +5,7 @@ export class TaskRequest {
     public title: string;
     public description?: string;
     public status: TaskStatus;
-    private created_at?: Date;
+    public created_at?: Date;
     public idProject?: number;
 
     constructor(title: string, id?: number, description?: string, status?: TaskStatus, idProject?: number) {
@@ -18,7 +17,14 @@ export class TaskRequest {
         this.idProject = idProject;
     }
 
-    public getCreatedAt(): string {
-        return formatInTimeZone(this.created_at || new Date(), 'Europe/Zurich', "yyyy-MM-dd'T'HH:mm:ss.SSS");
+    static fromJson(data: any): TaskRequest {
+        return new TaskRequest(
+            data.title,
+            data.id,
+            data.description,
+            data.status,
+            data.idProject
+        );
     }
 }
+

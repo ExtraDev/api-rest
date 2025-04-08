@@ -1,3 +1,4 @@
+import { formatInTimeZone } from 'date-fns-tz';
 import mysql from 'mysql2/promise';
 import { pool } from '../app';
 import { wrapQueryResult, wrapQueryResults } from '../common/helpers/query.helpers';
@@ -22,7 +23,7 @@ export async function createTask(task: TaskRequest): Promise<TaskResponse | unde
     const [result] = await pool.query(`
         INSERT INTO tasks(title, description, status, created_at)
         VALUES (?,?,?,?)
-        `, [task.title, task.description, task.status, task.getCreatedAt()]);
+        `, [task.title, task.description, task.status, formatInTimeZone(task.created_at || new Date(), 'Europe/Zurich', "yyyy-MM-dd'T'HH:mm:ss.SSS")]);
 
     const taskId = (result as mysql.ResultSetHeader).insertId;
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CodeError } from "../common/errors/messages.errors";
-import { extractTaskFromBody } from "./tasks.helper";
+import { TaskRequest } from "./models/task.request.model";
 import * as TaskService from "./tasks.service";
 
 export class TaskController {
@@ -29,7 +29,7 @@ export class TaskController {
 
     public async createTask(req: Request, res: Response): Promise<void> {
         try {
-            const taskRequest = extractTaskFromBody(req);
+            const taskRequest = TaskRequest.fromJson(req.body);
 
             const task = await TaskService.createTask(taskRequest);
 
@@ -53,7 +53,7 @@ export class TaskController {
                 return;
             }
 
-            const taskRequest = extractTaskFromBody(req);
+            const taskRequest = TaskRequest.fromJson(req.body);
 
             const task = await TaskService.updateTask(taskRequest, taskId);
 

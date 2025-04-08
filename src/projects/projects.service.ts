@@ -27,11 +27,11 @@ export async function createProjet(project: ProjectRequest): Promise<ProjectResp
 
         if (project.tasks && project.tasks.length > 0) {
             for (const task of project.tasks) {
-                console.log(task.title, task.description, task.status, task.getCreatedAt(), projectId);
+                console.log(task.title, task.description, task.status, task.created_at, projectId);
                 await connection.execute(
                     `INSERT INTO tasks (title, description, status, created_at, idProject) 
                      VALUES (?, ?, ?, ?, ?)`,
-                    [task.title, task.description ?? null, task.status, task.getCreatedAt(), projectId]
+                    [task.title, task.description ?? null, task.status, task.created_at, projectId]
                 );
             }
         }
