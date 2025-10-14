@@ -40,6 +40,7 @@ services:
       DB_NAME: ${MYSQL_DATABASE}
       NODE_ENV: production
       TOKEN_SECRET: ${TOKEN_SECRET}
+      BCRYPT_SALT_ROUND: ${BCRYPT_SALT_ROUND}
     depends_on:
       - mysql
     ports:
