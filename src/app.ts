@@ -39,7 +39,7 @@ usersRoutes(router);
 app.use("/", logAction, validateJsonFormat, router);
 
 app.get("/", (req: Request, res: Response) => {
-    res.status(200).json("Hello world! :)");
+    res.status(200).json("Hello world!");
 });
 
 const httpServer = createServer(app);
