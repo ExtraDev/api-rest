@@ -49,8 +49,19 @@ docker volume rm api-rest_mysql_data
 ## Build container
 ```
 docker build -t api_container . 
+
 ```
 ## Run container
 ```
 docker run -p 3000:3000 api_container
+```
+
+## Running by docker-compose
+```
+docker-compose up -d
+```
+
+If modification added:
+```
+docker-compose up --build
 ```

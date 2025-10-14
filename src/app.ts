@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from 'dotenv';
-import express, { Router } from "express";
+import express, { Request, Response, Router } from "express";
 import { createServer } from "http";
 import mysql from 'mysql2/promise';
 
@@ -37,6 +37,10 @@ projectsRoutes(router);
 usersRoutes(router);
 
 app.use("/", logAction, validateJsonFormat, router);
+
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).json("Hello world");
+});
 
 const httpServer = createServer(app);
 
