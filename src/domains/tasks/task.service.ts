@@ -10,6 +10,10 @@ export class TaskService {
     }
 
     public async createTask(task: TaskRequest): Promise<TaskResponse> {
-        return await this.repository.createTask(task.name, task.status, task.description);
+        return await this.repository.createTask(task);
+    }
+
+    public async updateTask(taskId: number, task: TaskRequest): Promise<TaskResponse> {
+        return await this.repository.updateTask(taskId, task);
     }
 }

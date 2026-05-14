@@ -32,13 +32,13 @@ export class TaskController {
 
     public async createTask(req: Request, res: Response): Promise<void> {
         try {
-            const parse = TaskRequestSchema.safeParse(req.body);
-            if (parse.error) {
+            const taskParsed = TaskRequestSchema.safeParse(req.body);
+            if (taskParsed.error) {
                 res.status(CodeError.BAD_REQUEST).json({ error: 'Data invalid' });
                 return
             }
 
-            const task = await this.taskService.createTask(parse.data);
+            const task = await this.taskService.createTask(taskParsed.data);
 
             if (!task) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
@@ -51,27 +51,31 @@ export class TaskController {
         }
     }
 
-    // public async updateTask(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const taskId = parseInt(req.params.id);
+    public async updateTask(req: Request, res: Response): Promise<void> {
+        try {
+            const taskId = parseInt(req.params.id);
 
-    //         if (!taskId) {
-    //             res.status(CodeError.BAD_REQUEST).json({ message: 'Miss task id!' });
-    //             return;
-    //         }
+            if (!taskId) {
+                res.status(CodeError.BAD_REQUEST).json({ message: 'Miss task id!' });
+                return;
+            }
 
-    //         const taskRequest = TaskRequest.fromJson(req.body);
+            const taskParsed = TaskRequestSchema.safeParse(req.body);
+            if (taskParsed.error) {
+                res.status(CodeError.BAD_REQUEST).json({ error: 'Data invalid' });
+                return
+            }
 
-    //         const task = await TaskService.updateTask(taskRequest, taskId);
+            const task = await this.taskService.updateTask(taskId, taskParsed.data);
 
-    //         if (!task) {
-    //             res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
-    //             return;
-    //         }
+            if (!task) {
+                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
+                return;
+            }
 
-    //         res.status(CodeError.OK).json(task);
-    //     } catch (error: any) {
-    //         res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
-    //     }
-    // }
+            res.status(CodeError.OK).json(task);
+        } catch (error: any) {
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
+        }
+    }
 }

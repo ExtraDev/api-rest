@@ -1,17 +1,18 @@
 import { db } from "../../database/database";
-import { TaskResponse, TaskResponseSchema } from "./schema/task.request.schema";
+import { TaskRequest, TaskResponse, TaskResponseSchema } from "./schema/task.request.schema";
 
 export class TaskRepository {
     public async getTasks(): Promise<ReadonlyArray<TaskResponse>> {
-        const rows = db.prepare(`
-            SELECT *
-            FROM tasks
-            `).all();
-
+        const rows = db.prepare(`SELECT * FROM tasks`).all();
         return TaskResponseSchema.array().parse(rows);
     }
 
-    public async createTask(name: string, status: TaskResponse['status'], description?: string): Promise<TaskResponse> {
+    public async getTask(taskId: number | bigint): Promise<TaskResponse> {
+        const rows = db.prepare(`SELECT * FROM tasks WHERE id = ?`).get(taskId);
+        return TaskResponseSchema.parse(rows);
+    }
+
+    public async createTask(taskRequest: TaskRequest): Promise<TaskResponse> {
         const result = db.prepare(`
             INSERT INTO tasks (
                 name,
@@ -20,25 +21,35 @@ export class TaskRepository {
             )
             VALUES (?, ?, ?)
         `).run(
-            name,
-            status,
-            description ?? null
+            taskRequest.name,
+            taskRequest.status,
+            taskRequest.description ?? null
         );
 
-        if (!result.lastInsertRowid) {
+        const taskId = result.lastInsertRowid;
+        if (!taskId) {
             throw new Error('Error while creating task');
         }
 
-        const task = db.prepare(`
-            SELECT
-                id,
-                name,
-                status,
-                description
-            FROM tasks
-            WHERE id = ?
-        `).get(result.lastInsertRowid);
+        return TaskResponseSchema.parse(await this.getTask(taskId));
+    }
 
-        return TaskResponseSchema.parse(task);
+    public async updateTask(taskId: number, taskRequest: TaskRequest): Promise<TaskResponse> {
+        const result = db.prepare(`
+            UPDATE tasks
+            SET name = ?, status = ?, description = ?
+            WHERE id = ?
+        `).run(
+            taskRequest.name,
+            taskRequest.status,
+            taskRequest.description ?? null,
+            taskId
+        );
+
+        if (result.changes <= 0) {
+            throw new Error('Error while updating task');
+        }
+
+        return TaskResponseSchema.parse(await this.getTask(taskId));
     }
 }
