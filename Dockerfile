@@ -1,5 +1,7 @@
 # Stage 1: Build the app
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
+
+RUN apk add --no-cache python3 make g++ build-base sqlite-dev
 
 WORKDIR /app
 
@@ -17,11 +19,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copier package.json pour pouvoir installer les dépendances de prod
-COPY package*.json ./
-RUN npm install
-
-# Copier les fichiers buildés depuis l'étape précédente
+# Copier les dépendances construites depuis l'étape de build
+COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3000

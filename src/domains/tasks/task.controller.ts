@@ -39,7 +39,6 @@ export class TaskController {
             }
 
             const task = await this.taskService.createTask(taskParsed.data);
-
             if (!task) {
                 res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
                 return;
@@ -67,9 +66,8 @@ export class TaskController {
             }
 
             const task = await this.taskService.updateTask(taskId, taskParsed.data);
-
             if (!task) {
-                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create task' });
+                res.status(CodeError.INTERNAL_SERVER_ERROR).json({ error: 'Failed to update task' });
                 return;
             }
 
