@@ -15,20 +15,20 @@ export class TaskController {
         }
     }
 
-    // public async getTask(req: Request, res: Response): Promise<void> {
-    //     try {
-    //         const taskId = parseInt(req.params.id);
+    public async getTask(req: Request, res: Response): Promise<void> {
+        try {
+            const taskId = parseInt(req.params.id);
 
-    //         if (!taskId) {
-    //             res.status(CodeError.BAD_REQUEST).json({ message: 'Miss task id!' });
-    //             return;
-    //         }
+            if (!taskId) {
+                res.status(CodeError.BAD_REQUEST).json({ message: 'Miss task id!' });
+                return;
+            }
 
-    //         res.status(CodeError.OK).json(await TaskService.getTask(taskId));
-    //     } catch (error: any) {
-    //         res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
-    //     }
-    // }
+            res.status(CodeError.OK).json(await this.taskService.getTask(taskId));
+        } catch (error: any) {
+            res.status(CodeError.BAD_REQUEST).json({ error: error.message || 'An error occurred' });
+        }
+    }
 
     public async createTask(req: Request, res: Response): Promise<void> {
         try {

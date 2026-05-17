@@ -9,6 +9,10 @@ export class TaskService {
         return await this.repository.getTasks();
     }
 
+    public async getTask(taskId: number): Promise<TaskResponse> {
+        return await this.repository.getTask(taskId);
+    }
+
     public async createTask(task: TaskRequest): Promise<TaskResponse> {
         return await this.repository.createTask(task);
     }
