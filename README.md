@@ -5,18 +5,10 @@ This REST API lets you manage projects and tasks.
 - Nodejs
     - Express
     - Typescript
-- Docker
-    - docker-compose
-    - mysql
-    - phpMyAdmin
+    - SQlite
 
-## Run the project
+## Run the API REST localy
 First, rename the file ".env.example" to ".env" in the "src" folder.
-
-Run the database and phpMyAdmin with docker by using this command :
-```
-docker-compose up -d
-```
 
 The install dependences of the project and run it by using this commands:
 ```
@@ -24,25 +16,23 @@ npm install
 npm run dev
 ```
 
-Then search: http://localhost:3000/api/tasks
-
-Access to phpMyAdmin by: http://localhost:8080
-- user: admin
-- password: admin
+Then search: http://localhost:3000/tasks
 
 Use postman and import collection "API-REST.postman_collection.json" to test you API.
 
-## Stop the project
-To stop the database base by docker use:
+### Run by using docker-compose
+Run the API-REST:
 ```
-docker-compose down
+docker-compose up -d
 ```
 
+## Stop the project
 To stop the application, simply ctrl + c in the terminal
 
-To reset the database, remove the volume by:
+
+### Stop by using docker-compose
 ```
-docker volume rm api-rest_mysql_data
+docker-compose down
 ```
 
 # Deploy
